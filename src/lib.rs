@@ -26,7 +26,7 @@ pub fn process_instruction(
     accounts: &[AccountInfo],
     instruction_data: &[u8],
 ) -> ProgramResult {
-    let account = &accounts.iter().next().ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let account = &AccountInfo<'_> = next_account_info(&mut accounts.iter())?;
     let mut counter: Counter = Counter::try_from_slice(&account.data.borrow())?;
 
     match CounterInstruction::try_from_slice(instruction_data)? {
@@ -38,7 +38,7 @@ pub fn process_instruction(
         }
     }
 
-    counter.serialize(&mut &mut account.data.borrow_mut()[..])?;
+    counter.serialize(writer: &mut *account.data.borrow_mut())?;
     
     msg!("Counter updated to {}", counter.count);
     
