@@ -8,8 +8,6 @@ use solana_program::{
     program_error::ProgramError
 };
 
-entrypoint!(process_instruction);
-
 #[derive(BorshSerialize, BorshDeserialize)]
 struct Counter {
     count: u32,
@@ -20,6 +18,8 @@ enum CounterInstruction {
     Increment(u32),
     Decrement(u32),
 }
+
+entrypoint!(process_instruction);
 
 pub fn process_instruction(
     program_id: &Pubkey,
