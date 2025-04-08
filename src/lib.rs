@@ -4,8 +4,7 @@ use solana_program::{
     entrypoint::ProgramResult,
     msg,
     pubkey::Pubkey,
-    entrypoint,
-    program_error::ProgramError
+    entrypoint
 };
 
 #[derive(BorshSerialize, BorshDeserialize)]
@@ -22,23 +21,23 @@ enum CounterInstruction {
 entrypoint!(process_instruction);
 
 pub fn process_instruction(
-    program_id: &Pubkey,
+    _program_id: &Pubkey,
     accounts: &[AccountInfo],
     instruction_data: &[u8],
 ) -> ProgramResult {
-    let account = &AccountInfo<'_> = next_account_info(&mut accounts.iter())?;
+    let account: &AccountInfo<'_> = next_account_info(&mut accounts.iter())?;
     let mut counter: Counter = Counter::try_from_slice(&account.data.borrow())?;
 
     match CounterInstruction::try_from_slice(instruction_data)? {
-        CounterInstruction::Increment(amount: u32) => {
+        CounterInstruction::Increment(amount) => {
             counter.count += amount;
         }
-        CounterInstruction::Decrement(amount: u32) => {
+        CounterInstruction::Decrement(amount) => {
             counter.count -= amount;
         }
     }
 
-    counter.serialize(writer: &mut *account.data.borrow_mut())?;
+    counter.serialize(&mut *account.data.borrow_mut())?;
     
     msg!("Counter updated to {}", counter.count);
     
