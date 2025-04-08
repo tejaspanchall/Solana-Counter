@@ -1,5 +1,6 @@
 import * as borsh from "borsh";
 import { Keypair, Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, TransactionInstruction } from "@solana/web3.js";
+import { test, expect } from "bun:test";
 
 class CounterAccount {
     count = 0;
